@@ -1,17 +1,50 @@
 import React from "react";
 import { Grid, Text, Button } from "../elements";
+import { getCookie, deleteCookie } from "../shared/Cookie";
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/User";
+import User from "../redux/modules/User";
 
 const Header = (props) => {
+  const is_login = useSelector((state) => state.user.is_login);
+  const dispatch = useDispatch();
+  
+
+  if (is_login) {
+    return (
+      <React.Fragment>
+        <Grid is_flex padding="4px 16px">
+          <Grid>
+            <Text margin="0px" size="24px" bold>
+              헬로
+            </Text>
+          </Grid>
+
+          <Grid is_flex>
+            <Button text="내 정보"></Button>
+            <Button text="알림"></Button>
+            <Button
+              text="로그아웃"
+              _onClick={() => {
+                dispatch(userActions.logOut({}))
+              }}
+            ></Button>
+          </Grid>
+        </Grid>
+      </React.Fragment>
+    );
+  }
+
   return (
     <React.Fragment>
-      <Grid padding="4px 16px" is_flex >
+      <Grid is_flex padding="4px 16px">
         <Grid>
           <Text margin="0px" size="24px" bold>
-            글을 올려라🎉 
+            헬로
           </Text>
         </Grid>
 
-        <Grid is_flex >
+        <Grid is_flex>
           <Button text="로그인"></Button>
           <Button text="회원가입"></Button>
         </Grid>

@@ -15,10 +15,10 @@ const Input = (props) => {
   );
 };
 
-Input.defaultPorps = {
+Input.defaultProps = {
   label: "텍스트",
   placeholder: "텍스트를 입력해주세요",
-  _onChange: () => {},
+  _onChange: () => {}
 };
 
 const EleInput = styled.input`

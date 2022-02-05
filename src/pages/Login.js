@@ -1,7 +1,18 @@
 import React from "react";
 import { Input, Text, Grid, Button } from "../elements";
+import { getCookie, setCookie, deleteCookie } from "../shared/Cookie";
+import { useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/User";
 
 const Login = (props) => {
+
+  const dispatch = useDispatch();
+  const login = () => {
+    dispatch(userActions.loginAction({ user_name : "로그인버튼클릭"}));
+
+    // setCookie("user_id", "bborl", 3);
+    // setCookie("user_pwd", "hagin", 3);
+  };
   return (
     <React.Fragment>
       <Grid padding="16px">
@@ -29,6 +40,7 @@ const Login = (props) => {
         <Button
           text="로그인하기"
           _onClick={() => {
+            login();
             console.log("로그인 됨");
           }}
         ></Button>
