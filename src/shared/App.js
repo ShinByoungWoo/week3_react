@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "../redux/configureStore";
 
@@ -9,6 +9,8 @@ import PostList from "../pages/PostList";
 import Login from "../pages/Login";
 import Header from "../components/Header";
 import SignUp from "../pages/SignUp";
+import Search from "./Search";
+import Notification from "../pages/Notification";
 
 import Permit from "./Permit";
 import { Button, Grid } from "../elements";
@@ -17,6 +19,7 @@ import { actionCreators as userActions } from "../redux/modules/User";
 import { apiKey } from "./firebase";
 import PostWrite from "../pages/PostWrite";
 import PostDetail from "../pages/PostDetail";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -39,7 +42,10 @@ function App() {
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={SignUp} />
           <Route path="/write" exact component={PostWrite} />
+          <Route path="/write/:id" exact component={PostWrite} />
           <Route path="/post/:id" exact component={PostDetail} />
+          <Route path="/search" exact component={Search} />
+          <Route path="/noti" exact component={Notification} />
         </ConnectedRouter>
       </Grid>
       <Permit>

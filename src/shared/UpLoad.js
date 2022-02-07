@@ -17,6 +17,15 @@ const UpLoad = (props) => {
 
     // ref로도 확인해봅시다. :)
     console.log(fileInput.current.files[0]);
+
+    const reader = new FileReader();
+    const file = fileInput.current.files[0]
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+        console.log(reader.result)
+        dispatch(imageActions.setPreview(reader.result));
+    }
   };
 
   const uploadFB = () => {
