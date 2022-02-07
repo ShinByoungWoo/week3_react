@@ -10,7 +10,6 @@ const PostWrite = (props) => {
   const is_login = useSelector((state) => state.user.is_login);
   const preview = useSelector((state) => state.image.preview);
   const post_list = useSelector((state) => state.post.list);
-
   const { history } = props;
 
   const post_id = props.match.params.id;
@@ -18,7 +17,6 @@ const PostWrite = (props) => {
 
   let _post = is_edit ? post_list.find((post) => post.id === post_id) : null;
 
-  console.log(_post);
   const [contents, setContents] = React.useState(_post ? _post.contents : "");
 
   const changeContents = (e) => {

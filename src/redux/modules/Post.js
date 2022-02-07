@@ -1,18 +1,22 @@
-import { createAction, handleAction, handleActions } from "redux-actions";
+import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { firestore, storage } from "../../shared/firebase";
 import moment from "moment";
 import { actionCreators as imageActions } from "./image";
-// import { get } from "immer/dist/internal";
 
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
+const DELETE_POST = "DELETE_POST";
 
 //액션 생성자
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const editPost = createAction(EDIT_POST, (post_id, post) => ({
+  post_id,
+  post,
+}));
+const deletePost = createAction(DELETE_POST, (post_id, post) => ({
   post_id,
   post,
 }));
@@ -37,6 +41,30 @@ const initialPost = {
   insert_dt: moment().format("YYYY-MM-dd hh:mm:ss"),
 };
 
+//미들웨어 - 목록 삭제하기(delete)
+const deletePostFB = (post_id, post = {}) => {
+  console.log('처음포스트아아디', post_id)
+  return function (dispatch, getState, { history }) {
+   
+    const _delete_list = getState().post.list;
+    const delete_idx = _delete_list.findIndex((p) => p.id === post_id);
+    // console.log(delete_idx)
+    const postDB = firestore.collection("post");
+    postDB
+      .doc(delete_idx)
+      .delete()
+      .then((doc) => {
+        dispatch(deletePost(delete_idx, _delete_list));
+        history.replace("/");
+      })
+      .catch((err) => {
+        window.alert("이미지 업로드 오류");
+        console.log("이미지 업로드 실패!", err);
+      });
+  };
+};
+
+//미들웨어 - 목록 수정하기(update)
 const editPostFB = (post_id = null, post = {}) => {
   return function (dispatch, getState, { history }) {
     if (!post_id) {
@@ -46,6 +74,7 @@ const editPostFB = (post_id = null, post = {}) => {
     const _image = getState().image.preview;
 
     const _post_idx = getState().post.list.findIndex((p) => p.id === post_id);
+    console.log(_post_idx)
     const _post = getState().post.list[_post_idx];
 
     console.log(_image, _post);
@@ -91,6 +120,7 @@ const editPostFB = (post_id = null, post = {}) => {
   };
 };
 
+//미들웨어 - 목록 추가하기(create)
 const addPostFB = (contents = "") => {
   return function (dispatch, getState, { history }) {
     const postDB = firestore.collection("post");
@@ -107,8 +137,6 @@ const addPostFB = (contents = "") => {
       contents: contents,
       insert_dt: moment().format("YYYY-MM-DD hh:mm:ss"),
     };
-    // 잘 만들어졌나 확인해보세요!!
-
     const _image = getState().image.preview;
 
     const _upload = storage
@@ -126,8 +154,6 @@ const addPostFB = (contents = "") => {
           postDB
             .add({ ...user_info, ..._post, image_url: url })
             .then((doc) => {
-              // 아이디를 추가해요!
-
               let post = { user_info, ..._post, id: doc.id, image_url: url };
               dispatch(addPost(post));
               history.replace("/");
@@ -147,7 +173,7 @@ const addPostFB = (contents = "") => {
   };
 };
 
-//미들웨어
+//미들웨어 - 목록 불러오기(Read)
 const getPostFB = () => {
   return function (dispatch, getState, { history }) {
     const postDB = firestore.collection("post");
@@ -170,7 +196,6 @@ const getPostFB = () => {
         );
         post_list.push(post);
       });
-      console.log(post_list);
 
       dispatch(setPost(post_list));
     });
@@ -191,9 +216,13 @@ export default handleActions(
     [EDIT_POST]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
-
         draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
       }),
+    [DELETE_POST]: (state, action) => produce(state, (draft) => {
+      draft.list.filter((list, index) => {
+        return parseInt(action.delete_idx) !== index;
+      })
+    })
   },
   initialState
 );
@@ -204,6 +233,7 @@ const actionCreators = {
   getPostFB,
   addPostFB,
   editPostFB,
+  deletePostFB,
 };
 
 export { actionCreators };
