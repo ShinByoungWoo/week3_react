@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Post from "../components/Post";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import { Grid } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/Post";
+import InfinityScroll from "../shared/InfinityScroll";
 
 const PostList = (props) => {
   const post_list = useSelector((state) => state.post.list);
   const dispatch = useDispatch();
   const user_info = useSelector((state) => state.user.user);
+  const is_loading = useSelector((state) => state.post.is_loading);
+  const paging = useSelector((state) => state.post.paging);
 
   const { history } = props;
 
@@ -19,37 +22,45 @@ const PostList = (props) => {
 
   return (
     <React.Fragment>
-      <Grid backgroundcolor={"#EFF6FF"} padding="20px 0px">
-        <Grid padding="16px">
-          {post_list.map((post, index) => {
-            if (post.user_info.user_id === user_info?.uid) {
-              return (
-                <Grid
-                  backgroundcolor={"#fff"}
-                  key={post.id}
-                  _onClick={() => {
-                    history.push(`/post/${post.id}`);
-                  }}
-                >
-                  <Post {...post} is_me />
-                </Grid>
-              );
-            } else {
-              return (
-                <Grid
-                  backgroundcolor={"#fff"}
-                  key={post.id}
-                  _onClick={() => {
-                    history.push(`/post/${post.id}`);
-                  }}
-                >
-                  <Post {...post} />
-                </Grid>
-              );
-            }
-          })}
+      <InfinityScroll
+        callNext={() => {
+          dispatch(postActions.getPostFB(paging.next));
+        }}
+        is_next={paging.next ? true : false}
+        loading={is_loading}
+      >
+        <Grid backgroundcolor={"#EFF6FF"} padding="20px 0px">
+          <Grid padding="16px">
+            {post_list.map((post, index) => {
+              if (post.user_info.user_id === user_info?.uid) {
+                return (
+                  <Grid
+                    backgroundcolor={"#fff"}
+                    key={post.id}
+                    _onClick={() => {
+                      history.push(`/post/${post.id}`);
+                    }}
+                  >
+                    <Post {...post} is_me />
+                  </Grid>
+                );
+              } else {
+                return (
+                  <Grid
+                    backgroundcolor={"#fff"}
+                    key={post.id}
+                    _onClick={() => {
+                      history.push(`/post/${post.id}`);
+                    }}
+                  >
+                    <Post {...post} />
+                  </Grid>
+                );
+              }
+            })}
+          </Grid>
         </Grid>
-      </Grid>
+      </InfinityScroll>
     </React.Fragment>
   );
 };

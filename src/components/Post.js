@@ -1,11 +1,22 @@
 import React from "react";
 import { Grid, Image, Text, Button } from "../elements";
 import { history } from "../redux/configureStore";
-
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/Post";
 
 const Post = (props) => {
-
-
+  const post_id = props.id;
+  const post_list = useSelector((store) => store.post.list);
+  const _post_idx = post_list.findIndex((p) => p.id === post_id);
+  console.log(post_list)
+  console.log(_post_idx)
+  // const post_idx = post_list[_post_idx];
+  const dispatch = useDispatch();
+  console.log(post_list);
+  const deletePost = () => {
+    dispatch(postActions.deletePostFB(_post_idx));
+    // console.log('삭제')
+  };
 
   return (
     <React.Fragment>
@@ -27,6 +38,17 @@ const Post = (props) => {
                 }}
               >
                 수정
+              </Button>
+            )}
+
+            {props.is_me && (
+              <Button
+                padding="5px"
+                width="auto"
+                margin="5px"
+                _onClick={deletePost}
+              >
+                삭제하러 가기
               </Button>
             )}
           </Grid>
