@@ -1,3 +1,5 @@
+// 댓글리스트와 댓글 컴포넌트
+
 import React from "react";
 import { Grid, Image, Text, Button } from "../elements";
 

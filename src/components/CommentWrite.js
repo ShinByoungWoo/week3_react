@@ -1,3 +1,5 @@
+// 댓글 입력 인풋 정보 컴포넌트
+
 import React from "react";
 import { Grid, Input, Button } from "../elements";
 

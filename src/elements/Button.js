@@ -43,6 +43,7 @@ const EleButton = styled.button`
   padding: ${(props) => props.padding};
   box-sizing: border-box;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
 `;
 

@@ -1,3 +1,5 @@
+// 게시글 상세 페이지 컴포넌트
+
 import React from "react";
 import Post from "../components/Post";
 import CommentWrite from "../components/CommentList";
@@ -19,6 +21,8 @@ const PostDetail = (props) => {
   // const delete_list = useSelector((state) => state.post.delete_list);
   console.log(id);
   // console.log(post_id);
+
+
   const deletePost = () => {
     dispatch(postActions.deletePostFB(id));
   };
@@ -36,10 +40,17 @@ const PostDetail = (props) => {
     //   })
     // }, [])
 
+  const onReload = () => {
+    deletePost()
+   
+  }
+
+  
+
   return (
     <React.Fragment>
       <Post {...post} is_me={post.user_info.user_id === user_info?.uid}></Post>
-      <Button _onClick={deletePost}>게시글 삭제</Button>
+      <Button _onClick={onReload}>게시글 삭제</Button>
       <CommentWrite />
       <CommentList />
     </React.Fragment>

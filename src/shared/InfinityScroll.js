@@ -1,3 +1,5 @@
+// 무한스크롤 컴포넌트
+
 import React from "react";
 import _ from "lodash";
 import { Spinner } from "../elements";

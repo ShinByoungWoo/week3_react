@@ -1,3 +1,5 @@
+// 댓글알림 전체 컴포넌트
+
 import React from "react";
 import Card from "../components/Card";
 import { Grid, Text, Image } from "../elements";

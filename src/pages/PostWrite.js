@@ -1,4 +1,6 @@
-import React from "react";
+// 게시글 작성(등록 삭제 가능) 컴포넌트
+
+import React, { useRef } from "react";
 import { Grid, Text, Button, Image, Input } from "../elements";
 import UpLoad from "../shared/UpLoad";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,6 +8,11 @@ import { actionCreators as postActions } from "../redux/modules/Post";
 import { actionCreators as imageActions } from "../redux/modules/image";
 
 const PostWrite = (props) => {
+  // const [value, setVaule] = React.useState('right');
+  // const is_value = useRef();
+  // const pick = 
+
+
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
   const preview = useSelector((state) => state.image.preview);
@@ -19,10 +26,18 @@ const PostWrite = (props) => {
 
   const [contents, setContents] = React.useState(_post ? _post.contents : "");
 
+  const [value, setValue] = React.useState(null);
+
   const changeContents = (e) => {
     setContents(e.target.value);
   };
 
+  
+  const changeValue = (e) => {
+    setValue(e.target.value);
+  };
+
+  
   React.useEffect(() => {
     if (is_edit && !_post) {
       console.log("포스트정보 없음");
@@ -35,15 +50,17 @@ const PostWrite = (props) => {
     }
   }, []);
 
- 
   const addPost = () => {
-    dispatch(postActions.addPostFB(contents));
+    dispatch(postActions.addPostFB(contents, value));
   };
 
   const editPost = () => {
-    dispatch(postActions.editPostFB(post_id, {contents: contents}))
-  }
+    dispatch(postActions.editPostFB(post_id, { contents: contents }));
+  };
 
+
+ 
+  
 
   if (!is_login) {
     return (
@@ -76,14 +93,61 @@ const PostWrite = (props) => {
       <Grid padding="16px">
         <Grid>
           <Text margin="0px" size="24px" bold>
-            미리보기
+            레이아웃 고르기
           </Text>
         </Grid>
-        <Image
-          shape="rectangle"
-          src={preview ? preview : "http://via.placeholder.com/400x300"}
-        />
       </Grid>
+
+ 
+
+
+  
+   <Grid padding="16px">
+     <label>
+       <Grid is_flex margin="20px 0px">
+         <Image
+           size={500}
+           shape="squear"
+           src={preview ? preview : "http://via.placeholder.com/400x300"}
+         />
+         <div>
+           <input type="radio" name="image" value="left" onChange={changeValue}/>
+           <Text size="32px" bold margin="0px">
+             왼쪽 그림 , 오른쪽 글자
+           </Text>
+         </div>
+       </Grid>
+
+    
+      
+          <Grid is_flex margin="20px 0px">
+            <div>
+              <input type="radio" name="image" value="right" onChange={changeValue}/>
+              <Text size="32px" bold margin="0px">
+                오른쪽 그림 , 왼쪽 글자
+              </Text>
+            </div>
+            <Image
+              size={500}
+              shape="squear"
+              src={preview ? preview : "http://via.placeholder.com/400x300"}
+            />
+          </Grid>
+
+          <Grid margin="auto">
+            <Image
+              size={500}
+              shape="squear"
+              src={preview ? preview : "http://via.placeholder.com/400x300"}
+            />
+            <input type="radio" name="image" value="top" onChange={changeValue}/>
+            <Text size="32px" bold margin="0px">
+              하단 글짜
+            </Text>
+          </Grid>
+        </label>
+      </Grid>
+
       <Grid padding="16px">
         <Input
           value={contents}
@@ -94,7 +158,11 @@ const PostWrite = (props) => {
         />
       </Grid>
       <Grid padding="16px">
-        {is_edit ? <Button _onClick={editPost}>게시글 수정</Button> : <Button _onClick={addPost}>게시글 작성</Button>}
+        {is_edit ? (
+          <Button _onClick={editPost}>게시글 수정</Button>
+        ) : (
+          <Button _onClick={addPost}>게시글 작성</Button>
+        )}
       </Grid>
     </React.Fragment>
   );

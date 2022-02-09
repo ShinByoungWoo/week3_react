@@ -1,3 +1,5 @@
+// 로그인 회원가입하기 / 내정보 알림 로그아웃 헤더 컴포넌트
+
 import React from "react";
 import { Grid, Text, Button } from "../elements";
 import { getCookie, deleteCookie } from "../shared/Cookie";

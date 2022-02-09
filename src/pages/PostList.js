@@ -1,3 +1,5 @@
+// 메인화면, 전체 게시글을 보여주며 무한스크롤 가능
+
 import React, { useState } from "react";
 import Post from "../components/Post";
 import { useSelector, useDispatch, useStore } from "react-redux";

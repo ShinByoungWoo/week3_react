@@ -45,24 +45,26 @@ const initialPost = {
   contents: "",
   comment_count: 10,
   // insert_dt: "2022-02-04 10:00:00",
-  insert_dt: moment().format("YYYY-MM-dd hh:mm:ss"),
+  insert_dt: moment().format("YYYY-MM-DD HH:MM:SS"),
 };
 
 //미들웨어 - 목록 삭제하기(delete)
 const deletePostFB = (post_id) => {
   return function (dispatch, getState, { history }) {
-    const _delete_list = getState().post.list;
-    const deleteList_index = _delete_list.findIndex((post) => {
-      return post.id === post_id;
-    });
+    // const _delete_list = getState().post.list;
+    // const deleteList_index = _delete_list.findIndex((post) => {
+    //   return post.id === post_id;
+    // });
     const postDB = firestore.collection("post");
     postDB
       .doc(post_id)
       .delete()
       .then((doc) => {
-        dispatch(deletePost(deleteList_index));
-        history.replace("/");
+        dispatch(deletePost(post_id));
+        window.location.replace("/")
+       
       })
+      
       .catch((err) => {
         window.alert("이미지 업로드 오류");
         console.log("이미지 업로드 실패!", err);
@@ -127,7 +129,7 @@ const editPostFB = (post_id = null, post = {}) => {
 };
 
 //미들웨어 - 목록 추가하기(create)
-const addPostFB = (contents = "") => {
+const addPostFB = (contents = "", value = "") => {
   return function (dispatch, getState, { history }) {
     const postDB = firestore.collection("post");
 
@@ -140,9 +142,12 @@ const addPostFB = (contents = "") => {
 
     const _post = {
       ...initialPost,
+      value: value,
       contents: contents,
-      insert_dt: moment().format("YYYY-MM-DD hh:mm:ss"),
+      insert_dt: moment().format("YYYY-MM-DD HH:mm:ss"),
     };
+    // console.log(_post)
+
     const _image = getState().image.preview;
 
     const _upload = storage
@@ -257,9 +262,6 @@ export default handleActions(
           (list) => action.payload.post_id !== list.id
         );
         draft.list = del_list;
-          console.log(draft)
-          console.log(draft.list)
-          console.log(del_list)
       }),
 
     //무한스크롤

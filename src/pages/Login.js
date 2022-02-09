@@ -1,3 +1,5 @@
+// 회원가입 컴포넌트
+
 import React, { useState } from "react";
 import { Input, Text, Grid, Button } from "../elements";
 import { getCookie, setCookie, deleteCookie } from "../shared/Cookie";

@@ -1,3 +1,5 @@
+// 회원가입 페이지 컴포넌트 (ID, PW, EMAIL 정규표현식)
+
 import React from "react";
 import { Grid, Text, Input, Button } from "../elements";
 import { useDispatch } from "react-redux";

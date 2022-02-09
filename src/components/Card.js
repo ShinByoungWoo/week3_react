@@ -1,3 +1,6 @@
+// 댓글, 좋아요 알림창 최소 컴포넌트
+
+
 import React from "react";
 import { Grid, Text, Image } from "../elements";
 

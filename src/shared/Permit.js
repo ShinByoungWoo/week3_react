@@ -1,3 +1,5 @@
+// 로그인여부 확인 컴포넌트
+
 import React from "react";
 import { useSelector } from "react-redux";
 import { apiKey } from "./firebase";
