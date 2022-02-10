@@ -1,8 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
-import { setCookie, getCookie, deleteCookie } from "../../shared/Cookie";
-
+import { setCookie, deleteCookie } from "../../shared/Cookie";
 import { auth } from "../../shared/firebase";
 import firebase from "firebase/app";
 
@@ -77,24 +76,20 @@ const signupFB = (id, pwd, user_name) => {
           .catch((error) => {
             console.log(error);
           });
-
-        // Signed in
-        // ...
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
 
         console.log(errorCode, errorMessage);
-        // ..
       });
   };
 };
 
 const loginCheckFB = () => {
-  return function (dispatch, getState, {history}){
+  return function (dispatch, getState, { history }) {
     auth.onAuthStateChanged((user) => {
-      if(user){
+      if (user) {
         dispatch(
           setUser({
             user_name: user.displayName,
@@ -103,21 +98,21 @@ const loginCheckFB = () => {
             uid: user.uid,
           })
         );
-      }else{
+      } else {
         dispatch(logOut());
       }
-    })
-  }
-}
+    });
+  };
+};
 
 const logoutFB = () => {
-  return function (dispatch, getState, {history}) {
+  return function (dispatch, getState, { history }) {
     auth.signOut().then(() => {
       dispatch(logOut());
-      history.replace('/login');
-    })
-  }
-}
+      history.replace("/login");
+    });
+  };
+};
 
 // reducer
 export default handleActions(

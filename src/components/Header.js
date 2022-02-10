@@ -1,12 +1,13 @@
 // 로그인 회원가입하기 / 내정보 알림 로그아웃 헤더 컴포넌트
 
 import React from "react";
-import { Grid, Text, Button } from "../elements";
-import { getCookie, deleteCookie } from "../shared/Cookie";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators as userActions } from "../redux/modules/User";
-import { history } from "../redux/configureStore";
+
 import { apiKey } from "../shared/firebase";
+import { actionCreators as userActions } from "../redux/modules/User";
+import { Grid, Text, Button } from "../elements";
+import { history } from "../redux/configureStore";
+
 
 const Header = (props) => {
   const is_login = useSelector((state) => state.user.is_login);

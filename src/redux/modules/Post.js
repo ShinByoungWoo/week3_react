@@ -1,7 +1,8 @@
-import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { firestore, storage } from "../../shared/firebase";
 import moment from "moment";
+
+import { firestore, storage } from "../../shared/firebase";
+import { createAction, handleActions } from "redux-actions";
 import { actionCreators as imageActions } from "./image";
 
 const SET_POST = "SET_POST";
@@ -34,40 +35,29 @@ const initialState = {
 };
 
 const initialPost = {
-  // id: 0,
-  // user_info: {
-  //   user_name: "병우",
-  //   user_profile:
-  //     "https://media.vlpt.us/images/tkejt1343/post/c3ffac0c-3c7b-4076-b4e3-027578aeac06/%EB%BD%80%EB%A6%AC2.jpg",
-  // },
   image_url:
     "https://media.vlpt.us/images/tkejt1343/post/c3ffac0c-3c7b-4076-b4e3-027578aeac06/%EB%BD%80%EB%A6%AC2.jpg",
   contents: "",
   comment_count: 10,
-  // insert_dt: "2022-02-04 10:00:00",
+  value: "top",
   insert_dt: moment().format("YYYY-MM-DD HH:MM:SS"),
 };
 
 //미들웨어 - 목록 삭제하기(delete)
 const deletePostFB = (post_id) => {
   return function (dispatch, getState, { history }) {
-    // const _delete_list = getState().post.list;
-    // const deleteList_index = _delete_list.findIndex((post) => {
-    //   return post.id === post_id;
-    // });
     const postDB = firestore.collection("post");
     postDB
       .doc(post_id)
       .delete()
       .then((doc) => {
         dispatch(deletePost(post_id));
-        window.location.replace("/")
-       
+        window.location.replace("/");
       })
-      
+
       .catch((err) => {
-        window.alert("이미지 업로드 오류");
-        console.log("이미지 업로드 실패!", err);
+        window.alert("게시글 삭제오류 오류");
+        console.log("삭제 실패!", err);
       });
   };
 };
@@ -82,10 +72,8 @@ const editPostFB = (post_id = null, post = {}) => {
     const _image = getState().image.preview;
 
     const _post_idx = getState().post.list.findIndex((p) => p.id === post_id);
-    console.log(_post_idx);
     const _post = getState().post.list[_post_idx];
 
-    console.log(_image, _post);
     const postDB = firestore.collection("post");
 
     if (_image === _post.image_url) {
@@ -107,7 +95,6 @@ const editPostFB = (post_id = null, post = {}) => {
         snapshot.ref
           .getDownloadURL()
           .then((url) => {
-            console.log(url);
             return url;
           })
           .then((url) => {
@@ -129,7 +116,7 @@ const editPostFB = (post_id = null, post = {}) => {
 };
 
 //미들웨어 - 목록 추가하기(create)
-const addPostFB = (contents = "", value = "") => {
+const addPostFB = (contents = "", value = "top") => {
   return function (dispatch, getState, { history }) {
     const postDB = firestore.collection("post");
 
@@ -146,7 +133,6 @@ const addPostFB = (contents = "", value = "") => {
       contents: contents,
       insert_dt: moment().format("YYYY-MM-DD HH:mm:ss"),
     };
-    // console.log(_post)
 
     const _image = getState().image.preview;
 
@@ -158,7 +144,6 @@ const addPostFB = (contents = "", value = "") => {
       snapshot.ref
         .getDownloadURL()
         .then((url) => {
-          console.log(url);
           return url;
         })
         .then((url) => {
@@ -168,7 +153,6 @@ const addPostFB = (contents = "", value = "") => {
               let post = { user_info, ..._post, id: doc.id, image_url: url };
               dispatch(addPost(post));
               history.replace("/");
-              console.log(post);
               dispatch(imageActions.setPreview(null));
             })
             .catch((err) => {

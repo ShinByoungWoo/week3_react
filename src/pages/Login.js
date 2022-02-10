@@ -1,9 +1,9 @@
 // 회원가입 컴포넌트
 
 import React, { useState } from "react";
-import { Input, Text, Grid, Button } from "../elements";
-import { getCookie, setCookie, deleteCookie } from "../shared/Cookie";
 import { useDispatch } from "react-redux";
+
+import { Input, Text, Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/User";
 import { emailCheck } from "../shared/common";
 
@@ -14,20 +14,15 @@ const Login = (props) => {
   const [pwd, setPwd] = useState("");
 
   const login = () => {
-
-    console.log(id)
-
-    
-
     if (id === "" || pwd === "") {
       window.alert("아이디 혹은 비밀번호를 입력해주세요");
       return;
     }
-    if(!emailCheck(id)){
+    if (!emailCheck(id)) {
       window.alert("이메일 형식이 맞지 않습니다.");
-      return
+      return;
     }
-    dispatch(userActions.loginFB( id, pwd ));
+    dispatch(userActions.loginFB(id, pwd));
   };
   return (
     <React.Fragment>
@@ -55,11 +50,13 @@ const Login = (props) => {
           />
         </Grid>
         <Button
-          text="로그인하기"
           _onClick={() => {
             login();
           }}
-        ></Button>
+          _disabled={(id === "" || pwd === "" ? true  : false)}
+        >
+          로그인하기
+        </Button>
       </Grid>
     </React.Fragment>
   );

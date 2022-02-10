@@ -23,7 +23,6 @@ import Test from "./Test";
 
 function App() {
   const dispatch = useDispatch();
-  //헤더는 중간컴포넌트고 앱이 시작점이니 여기서 한다..라고함
   const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
   const is_session = sessionStorage.getItem(_session_key) ? true : false;
 
@@ -44,14 +43,14 @@ function App() {
           <Route path="/write" exact component={PostWrite} />
           <Route path="/write/:id" exact component={PostWrite} />
           <Route path="/post/:id" exact component={PostDetail} />
-          {/* <Route path="/search" exact component={Search} /> */}
+          <Route path="/search" exact component={Search} />
           <Route path="/noti" exact component={Notification} />
           <Route path="/test" exact component={Test} />
         </ConnectedRouter>
       </Grid>
       <Permit>
         <Button is_float text="+" _onClick={() => {
-          {history.push('/write')}
+          history.push('/write')
         }}></Button>
       </Permit>
     </React.Fragment>

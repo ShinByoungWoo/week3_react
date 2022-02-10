@@ -1,18 +1,14 @@
 // 게시글 작성(등록 삭제 가능) 컴포넌트
 
-import React, { useRef } from "react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { Grid, Text, Button, Image, Input } from "../elements";
 import UpLoad from "../shared/UpLoad";
-import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/Post";
 import { actionCreators as imageActions } from "../redux/modules/image";
 
 const PostWrite = (props) => {
-  // const [value, setVaule] = React.useState('right');
-  // const is_value = useRef();
-  // const pick = 
-
-
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
   const preview = useSelector((state) => state.image.preview);
@@ -32,12 +28,10 @@ const PostWrite = (props) => {
     setContents(e.target.value);
   };
 
-  
   const changeValue = (e) => {
     setValue(e.target.value);
   };
 
-  
   React.useEffect(() => {
     if (is_edit && !_post) {
       console.log("포스트정보 없음");
@@ -58,10 +52,7 @@ const PostWrite = (props) => {
     dispatch(postActions.editPostFB(post_id, { contents: contents }));
   };
 
-
- 
-  
-
+  //로그인 안됐을 때
   if (!is_login) {
     return (
       <Grid margin="100px 0px" padding="16px" center>
@@ -81,6 +72,8 @@ const PostWrite = (props) => {
       </Grid>
     );
   }
+
+  //로그인 됐을 때
   return (
     <React.Fragment>
       <Grid padding="16px">
@@ -98,56 +91,69 @@ const PostWrite = (props) => {
         </Grid>
       </Grid>
 
- 
-
-
-  
-   <Grid padding="16px">
-     <label>
-       <Grid is_flex margin="20px 0px">
-         <Image
-           size={500}
-           shape="squear"
-           src={preview ? preview : "http://via.placeholder.com/400x300"}
-         />
-         <div>
-           <input type="radio" name="image" value="left" onChange={changeValue}/>
-           <Text size="32px" bold margin="0px">
-             왼쪽 그림 , 오른쪽 글자
-           </Text>
-         </div>
-       </Grid>
-
-    
-      
-          <Grid is_flex margin="20px 0px">
-            <div>
-              <input type="radio" name="image" value="right" onChange={changeValue}/>
-              <Text size="32px" bold margin="0px">
-                오른쪽 그림 , 왼쪽 글자
-              </Text>
-            </div>
-            <Image
-              size={500}
-              shape="squear"
-              src={preview ? preview : "http://via.placeholder.com/400x300"}
+      {/* 왼쪽 그림 배치 */}
+      <Grid padding="16px">
+        <Grid is_flex margin="20px 0px">
+          <Image
+            size={500}
+            shape="squear"
+            src={preview ? preview : "http://via.placeholder.com/400x300"}
+          />
+          <label>
+            <input
+              type="radio"
+              name="image"
+              value="left"
+              onChange={changeValue}
             />
-          </Grid>
-
-          <Grid margin="auto">
-            <Image
-              size={500}
-              shape="squear"
-              src={preview ? preview : "http://via.placeholder.com/400x300"}
-            />
-            <input type="radio" name="image" value="top" onChange={changeValue}/>
             <Text size="32px" bold margin="0px">
-              하단 글짜
+              왼쪽 그림 , 오른쪽 글자
             </Text>
-          </Grid>
-        </label>
+          </label>
+        </Grid>
+
+        {/* 오른쪽 그림 배치 */}
+        <Grid is_flex margin="20px 0px">
+          <label>
+            <input
+              type="radio"
+              name="image"
+              value="right"
+              onChange={changeValue}
+            />
+            <Text size="32px" bold margin="0px">
+              오른쪽 그림 , 왼쪽 글자
+            </Text>
+          </label>
+          <Image
+            size={500}
+            shape="squear"
+            src={preview ? preview : "http://via.placeholder.com/400x300"}
+          />
+        </Grid>
+
+        {/* 상단 그림 배치 */}
+        <Grid margin="20px 0px">
+          <Image
+            size={500}
+            shape="squear"
+            src={preview ? preview : "http://via.placeholder.com/400x300"}
+          />
+          <label>
+            <input
+              type="radio"
+              name="image"
+              value="top"
+              onChange={changeValue}
+            />
+            <Text size="32px" bold margin="0px">
+              상단 그림, 하단 글자
+            </Text>
+          </label>
+        </Grid>
       </Grid>
 
+      {/* 게시글 작성 및 수정 */}
       <Grid padding="16px">
         <Input
           value={contents}
@@ -159,9 +165,19 @@ const PostWrite = (props) => {
       </Grid>
       <Grid padding="16px">
         {is_edit ? (
-          <Button _onClick={editPost}>게시글 수정</Button>
+          <Button
+            _onClick={editPost}
+            _disabled={contents === "" || value === "" ? true : false}
+          >
+            게시글 수정
+          </Button>
         ) : (
-          <Button _onClick={addPost}>게시글 작성</Button>
+          <Button
+            _onClick={addPost}
+            _disabled={contents === "" || value === "" ? true : false}
+          >
+            게시글 작성
+          </Button>
         )}
       </Grid>
     </React.Fragment>

@@ -1,8 +1,9 @@
 // 회원가입 페이지 컴포넌트 (ID, PW, EMAIL 정규표현식)
 
 import React from "react";
-import { Grid, Text, Input, Button } from "../elements";
 import { useDispatch } from "react-redux";
+
+import { Grid, Text, Input, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/User";
 import { emailCheck } from "../shared/common";
 
@@ -15,17 +16,17 @@ const SignUp = (props) => {
 
   const signup = () => {
     if (id === "" || pwd === "" || user_name === "") {
-      window.alert('빈칸 모두 입력해주세요.')
+      window.alert("빈칸 모두 입력해주세요.");
       return;
     }
 
-    if(!emailCheck(id)){
+    if (!emailCheck(id)) {
       window.alert("이메일 형식이 맞지 않습니다.");
-      return
+      return;
     }
 
     if (pwd !== pwd_check) {
-      window.alert('비밀번호가 맞지 않습니다.')
+      window.alert("비밀번호가 맞지 않습니다.");
       return;
     }
     dispatch(userActions.signupFB(id, pwd, pwd_check, user_name));
@@ -44,7 +45,6 @@ const SignUp = (props) => {
             placeholder="아이디를 입력해주세요"
             _onChange={(e) => {
               setId(e.target.value);
-              console.log("회원가입 아이디");
             }}
           />
         </Grid>
@@ -66,7 +66,6 @@ const SignUp = (props) => {
             placeholder="비밀번호를 입력해주세요"
             _onChange={(e) => {
               setPwd(e.target.value);
-              console.log("비번");
             }}
           />
         </Grid>
@@ -77,7 +76,6 @@ const SignUp = (props) => {
             placeholder="비밀번호를 다시 입력해주세요"
             _onChange={(e) => {
               setPwdCheck(e.target.value);
-              console.log("비번확인");
             }}
           />
         </Grid>

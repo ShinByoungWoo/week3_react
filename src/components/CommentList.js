@@ -1,7 +1,7 @@
 // 댓글리스트와 댓글 컴포넌트
 
 import React from "react";
-import { Grid, Image, Text, Button } from "../elements";
+import { Grid, Image, Text } from "../elements";
 
 const CommentList = (props) => {
 
@@ -21,6 +21,7 @@ const CommentList = (props) => {
 export default CommentList;
 
 
+//같은 페이지라서 Export 안해도 됨
 const CommentItem = (props) => {
     const {user_id, user_name, user_profile, post_id, insert_dt,contents} = props;
     return(

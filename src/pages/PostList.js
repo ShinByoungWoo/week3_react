@@ -1,8 +1,9 @@
 // 메인화면, 전체 게시글을 보여주며 무한스크롤 가능
 
-import React, { useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import Post from "../components/Post";
-import { useSelector, useDispatch, useStore } from "react-redux";
 import { Grid } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/Post";
 import InfinityScroll from "../shared/InfinityScroll";
